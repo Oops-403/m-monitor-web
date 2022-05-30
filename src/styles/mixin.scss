@@ -1,0 +1,121 @@
+// @mixin use via @include call
+
+// The text is beyond hidden, the default is a single line beyond hidden, you can set multiple lines
+@mixin text-overflow($line: 1, $fixed-width: true) {
+  @if ($line == 1 and $fixed-width == true) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+  }
+}
+
+// The positioning is centered, the default is horizontally centered,
+// you can choose to be centered vertically, or centered both horizontally and vertically
+@mixin position-center($type: x) {
+  position: absolute;
+  @if ($type == x) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  @if ($type == y) {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  @if ($type == xy) {
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+// button hover gradient
+@mixin btnHoverTrans($type: default) {
+  @if ($type == 'default') {
+    cursor: pointer;
+    transition: opacity 0.3s;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  @if ($type == 'disabled') {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  @if ($type == 'primary') {
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      background: $app-primary;
+      color: #fff !important;
+    }
+  }
+  @if ($type == 'box') {
+    background: $app-box-bg;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      background: $app-box-hover-bg;
+    }
+  }
+  @if ($type == 'card') {
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      transform: scale(1.035);
+    }
+  }
+  @if ($type == 'link') {
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  @if ($type == 'gradientText') {
+    font-size: 18px;
+    font-weight: 500;
+    background: $app-text-gradient;
+    -webkit-background-clip: text;
+    color: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// One line is centered and multiple lines are left aligned
+@mixin oneLineCenterMultipleLeft() {
+  display: table;
+  margin: 0 auto;
+  text-align: left;
+}
+
+// scrollbar hidden
+@mixin scrollbarHidden() {
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background: $app-text-secondary;
+    }
+  }
+}
+
+@mixin clearfix() {
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
