@@ -1,6 +1,6 @@
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toLogin } from '@/api/modules/login'
 import { accessTokenStored, userInfoStored } from '@/utils/storage'
@@ -10,6 +10,11 @@ const isFocus = ref(false)
 
 const userName = ref('')
 const userPassword = ref('')
+
+onMounted(async () => {
+  accessTokenStored.destroy()
+  userInfoStored.destroy()
+})
 
 async function handleLogin () {
   const userInfo: UserInfo = await toLogin({ username: userName.value, password: userPassword.value })
