@@ -1,7 +1,4 @@
-import { ethers, BigNumber } from 'ethers'
-import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers'
-import { JsonFragment } from '@ethersproject/abi'
-import { Filter } from '@ethersproject/abstract-provider'
+import { BigNumber, providers, Contract, utils, ContractInterface } from 'ethers'
 import { getFunctionFragment } from '@/ethereum-sdk/utils/contract'
 import { TokenFarmFunction, TokenFarmEvent, TokenFarmsABI } from '@/ethereum-sdk/abi/tokenFarms'
 import { NFTFarmFunction, NFTFarmsEvent, NFTFarmsABI } from '@/ethereum-sdk/abi/nftFarms'
@@ -14,7 +11,8 @@ const enum DBName {
   LPFarm = 'lpFarm'
 }
 
-const provider = new ethers.providers.JsonRpcProvider('https://rinkeby.infura.io/v3/0362057efe1343109860f9c5ab54027f')
+const provider = new providers.JsonRpcProvider('https://rinkeby.infura.io/v3/0362057efe1343109860f9c5ab54027f')
+
 const stepBlock = 10000
 
 const farmContracts = {
@@ -31,18 +29,18 @@ const lpFarmInfo = new Map()
 async function fetchUsersPendingReward (wallets: string[]) {
   console.log('>>> %c start fetch user pending reward', 'color: #0f0;')
 
-  const tokenContact = new ethers.Contract(
+  const tokenContact = new Contract(
     farmContracts.tokenFarm,
     [getFunctionFragment(TokenFarmsABI, TokenFarmFunction.PendingReward)],
     provider
   )
 
-  const nftContact = new ethers.Contract(
+  const nftContact = new Contract(
     farmContracts.nftFarm,
     [getFunctionFragment(NFTFarmsABI, NFTFarmFunction.PendingReward)],
     provider
   )
-  const lpContact = new ethers.Contract(
+  const lpContact = new Contract(
     farmContracts.lpFarm,
     [getFunctionFragment(LPFarmsABI, LPFarmFunction.PendingReward)],
     provider
@@ -55,7 +53,7 @@ async function fetchUsersPendingReward (wallets: string[]) {
       tokenFarmInfo.set(item.toLowerCase(), {
         wallet: item.toLowerCase(),
         pending: BigNumber.from(tokenPending).toString(),
-        total: Number(ethers.utils.formatUnits(tokenPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+        total: Number(utils.formatUnits(tokenPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
       })
 
       // nft
@@ -63,7 +61,7 @@ async function fetchUsersPendingReward (wallets: string[]) {
       nftFarmInfo.set(item.toLowerCase(), {
         wallet: item.toLowerCase(),
         pending: BigNumber.from(nftPending).toString(),
-        total: Number(ethers.utils.formatUnits(nftPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+        total: Number(utils.formatUnits(nftPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
       })
 
       // lp
@@ -71,7 +69,7 @@ async function fetchUsersPendingReward (wallets: string[]) {
       lpFarmInfo.set(item.toLowerCase(), {
         wallet: item.toLowerCase(),
         pending: BigNumber.from(lpPending).toString(),
-        total: Number(ethers.utils.formatUnits(lpPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+        total: Number(utils.formatUnits(lpPending, 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
       })
     })
   )
@@ -89,9 +87,9 @@ async function statFarmUserReward (
     fromBlock,
     latestBlock
   }: {
-    provider: JsonRpcProvider | Web3Provider,
+    provider: providers.JsonRpcProvider | providers.Web3Provider,
     farmAddress: string,
-    farmABI: JsonFragment[],
+    farmABI: Exclude<ContractInterface, utils.Interface>,
     eventName: string,
     dbName: DBName,
     fromBlock: number,
@@ -106,12 +104,12 @@ async function statFarmUserReward (
   // }
   let endBlock = startBlock + stepBlock > latestBlock ? latestBlock : startBlock + stepBlock
 
-  const iface = new ethers.utils.Interface(farmABI)
+  const iface = new utils.Interface(farmABI)
   const topics1 = [iface.getEventTopic(eventName)]
   console.log(`>>> %c ${dbName} start with block: ${startBlock}`, 'color: #0f0;')
 
   while (endBlock <= latestBlock) {
-    const filter: Filter = {
+    const filter: providers.Filter = {
       address: farmAddress,
       topics: [topics1],
       fromBlock: startBlock,
@@ -141,7 +139,7 @@ async function statFarmUserReward (
                 pending: old.pending,
                 endBlock: log.blockNumber,
                 claimed: BigNumber.from(old.claimed || '0').add(item.args._amount).toString(),
-                total: Number(ethers.utils.formatUnits(BigNumber.from(item.args._amount).add(ethers.utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+                total: Number(utils.formatUnits(BigNumber.from(item.args._amount).add(utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
               })
             }
 
@@ -151,7 +149,7 @@ async function statFarmUserReward (
                 pending: old.pending,
                 endBlock: log.blockNumber,
                 claimed: BigNumber.from(old.claimed || '0').add(item.args._amount).toString(),
-                total: Number(ethers.utils.formatUnits(BigNumber.from(item.args._amount).add(ethers.utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+                total: Number(utils.formatUnits(BigNumber.from(item.args._amount).add(utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
               })
             }
 
@@ -161,7 +159,7 @@ async function statFarmUserReward (
                 pending: old.pending,
                 endBlock: log.blockNumber,
                 claimed: BigNumber.from(old.claimed || '0').add(item.args._amount).toString(),
-                total: Number(ethers.utils.formatUnits(BigNumber.from(item.args._amount).add(ethers.utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
+                total: Number(utils.formatUnits(BigNumber.from(item.args._amount).add(utils.parseEther(old.total + '')), 18).replace(/^(\d*\.\d{2})\d*/, '$1'))
               })
             }
           }

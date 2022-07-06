@@ -1,7 +1,6 @@
-import { BigNumberish, BigNumber, BaseContract, ContractTransaction } from 'ethers'
-import { JsonFragment } from '@ethersProject/abi'
+import { BigNumberish, BigNumber, BaseContract, ContractTransaction, ContractInterface, utils } from 'ethers'
 
-export const ERC1155ABI: Array<JsonFragment> = [
+export const ERC1155ABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'anonymous': false,
     'inputs': [

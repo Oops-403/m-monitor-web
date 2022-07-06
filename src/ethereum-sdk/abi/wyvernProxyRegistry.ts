@@ -1,7 +1,6 @@
-import { BaseContract, ContractTransaction } from 'ethers'
-import { JsonFragment } from '@ethersProject/abi'
+import { BaseContract, ContractInterface, ContractTransaction, utils } from 'ethers'
 
-export const wyvernProxyRegistryABI: Array<JsonFragment> = [
+export const wyvernProxyRegistryABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'constant': true,
     'inputs': [],

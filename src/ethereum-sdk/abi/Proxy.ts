@@ -1,6 +1,4 @@
-import { JsonFragment } from '@ethersProject/abi'
-
-export const proxyABI: JsonFragment = {
+export const proxyABI: any = {
   'constant': false,
   'inputs': [
     {
@@ -28,7 +26,7 @@ export const proxyABI: JsonFragment = {
   'type': 'function'
 }
 
-export const proxyAssertABI: JsonFragment = {
+export const proxyAssertABI: any = {
   'constant': false,
   'inputs': [
     {

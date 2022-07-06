@@ -1,8 +1,6 @@
-import { ethers, BaseContract, ContractInterface } from 'ethers'
-import { Web3Provider, JsonRpcProvider } from '@ethersProject/providers'
-import { JsonFragment, FunctionFragment, EventFragment } from '@ethersProject/abi'
+import { ethers, BaseContract, ContractInterface, utils, providers } from 'ethers'
 
-export async function validateContractAddress (provider: JsonRpcProvider | Web3Provider, address: string) {
+export async function validateContractAddress (provider: providers.JsonRpcProvider | providers.Web3Provider, address: string): Promise<boolean> {
   const contractCode = await provider.getCode(address)
   return contractCode !== '0x'
 }
@@ -10,18 +8,18 @@ export async function validateContractAddress (provider: JsonRpcProvider | Web3P
 /**
  * @param abi
  * @param fragmentName
- * @returns { FunctionFragment }
+ * @returns { utils.FunctionFragment }
  */
-export function getFunctionFragment (abi: JsonFragment[], fnName: string): FunctionFragment {
+export function getFunctionFragment (abi: Exclude<ContractInterface, utils.Interface>, fnName: string): utils.FunctionFragment {
   return new ethers.utils.Interface(abi).getFunction(fnName)
 }
 
 /**
  * @param abi
  * @param eventName
- * @returns { EventFragment }
+ * @returns { utils.EventFragment }
  */
-export function getEventFragment (abi: JsonFragment[], eventName: string): EventFragment {
+export function getEventFragment (abi: Exclude<ContractInterface, utils.Interface>, eventName: string): utils.EventFragment {
   return new ethers.utils.Interface(abi).getEvent(eventName)
 }
 
@@ -31,6 +29,6 @@ export function getEventFragment (abi: JsonFragment[], eventName: string): Event
  * @param abis
  * @returns a instance of contract
  */
-export function getContract<T extends BaseContract> (provider: JsonRpcProvider | Web3Provider, address: string, abis: ContractInterface) {
+export function getContract<T extends BaseContract> (provider: providers.Web3Provider | providers.JsonRpcProvider, address: string, abis: ContractInterface) {
   return new ethers.Contract(address, abis, provider) as T
 }

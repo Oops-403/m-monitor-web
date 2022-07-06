@@ -1,7 +1,6 @@
-import { BaseContract, BigNumber, BigNumberish, ContractTransaction } from 'ethers'
-import { JsonFragment } from '@ethersProject/abi'
+import { BaseContract, BigNumber, BigNumberish, ContractInterface, ContractTransaction, utils } from 'ethers'
 
-export const NFTFarmsABI: Array<JsonFragment> = [
+export const NFTFarmsABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'anonymous': false,
     'inputs': [

@@ -1,6 +1,6 @@
-import { JsonFragment } from '@ethersProject/abi'
+import { ContractInterface, utils } from 'ethers'
 
-export const supportsInterfaceABI: Array<JsonFragment> = [
+export const supportsInterfaceABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'inputs': [
       {

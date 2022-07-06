@@ -1,4 +1,8 @@
-import { BigNumber } from 'ethers'
+import { BigNumber, providers } from 'ethers'
+
+export type ReadProvider = providers.JsonRpcProvider | providers.Web3Provider
+
+export type WriteProvider = providers.Web3Provider
 
 export interface BaseAssetContract {
   address: string;

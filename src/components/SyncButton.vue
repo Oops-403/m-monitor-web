@@ -2,7 +2,6 @@
   lang="ts"
   setup
 >
-import { defineEmits } from 'vue'
 import { SyncCircleOutline } from '@vicons/ionicons5'
 
 const emit = defineEmits(['sync-click'])

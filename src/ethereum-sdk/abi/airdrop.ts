@@ -1,7 +1,6 @@
-import { BaseContract, BigNumberish, BigNumber, ContractTransaction } from 'ethers'
-import { JsonFragment } from '@ethersProject/abi'
+import { utils, BaseContract, BigNumberish, BigNumber, ContractTransaction, ContractInterface } from 'ethers'
 
-export const MYClaimABI: Array<JsonFragment> = [
+export const MYClaimABI: Exclude<ContractInterface, utils.Interface> = [
   {
     'anonymous': false,
     'inputs': [

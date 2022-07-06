@@ -1,7 +1,6 @@
-import { JsonFragment } from '@ethersProject/abi'
-import { BaseContract, BigNumber, BigNumberish, ContractTransaction } from 'ethers'
+import { BaseContract, BigNumber, BigNumberish, ContractInterface, ContractTransaction, utils } from 'ethers'
 
-export const LPFarmsABI: Array<JsonFragment> = [
+export const LPFarmsABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'anonymous': false,
     'inputs': [

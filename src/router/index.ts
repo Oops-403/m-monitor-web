@@ -2,7 +2,6 @@ import {
   createRouter,
   createWebHistory,
   RouteRecordRaw,
-  RouteRecord,
   RouteLocationNormalizedLoaded,
   NavigationGuardNext
 } from 'vue-router'
@@ -18,7 +17,7 @@ NProgress.configure({ showSpinner: false })
 // Load all submodule routes
 const importAll = (r: __WebpackModuleApi.RequireContext) => {
   r.keys().forEach((key: string) => {
-    r(key).default.forEach((route: RouteRecord) => {
+    r(key).default.forEach((route: RouteRecordRaw) => {
       routes.push(route)
     })
   })

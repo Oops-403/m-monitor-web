@@ -1,7 +1,6 @@
-import { BaseContract, BigNumber, BigNumberish, ContractTransaction } from 'ethers'
-import { JsonFragment } from '@ethersProject/abi'
+import { BaseContract, BigNumber, BigNumberish, ContractInterface, ContractTransaction, utils } from 'ethers'
 
-export const wyvernExchangeABI: Array<JsonFragment> = [
+export const wyvernExchangeABI: Exclude<ContractInterface, utils.Interface>= [
   {
     'constant': true,
     'inputs': [],
